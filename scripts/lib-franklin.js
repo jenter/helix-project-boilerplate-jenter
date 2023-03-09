@@ -552,7 +552,7 @@ export async function waitForLCP(lcpBlocks) {
   const block = document.querySelector('.block');
   const hasLCPBlock = (block && lcpBlocks.includes(block.dataset.blockName));
   if (hasLCPBlock) await loadBlock(block);
-
+  // mark
   document.body.style.display = null;
   const lcpCandidate = document.querySelector('main img');
   await new Promise((resolve) => {
@@ -613,6 +613,7 @@ export function setup() {
  * Auto initializiation.
  */
 function init() {
+  // mark
   document.body.style.display = 'none';
   setup();
   sampleRUM('top');
