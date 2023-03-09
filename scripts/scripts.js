@@ -117,12 +117,15 @@ async function loadLazy(doc) {
  */
 function loadDelayed() {
   // eslint-disable-next-line import/no-cycle
+  // mark
   window.setTimeout(() => import('./delayed.js'), 3000);
   // load anything that can be postponed to the latest here
 }
 
 async function loadPage() {
+  // mark
   await loadEager(document);
+  // mark
   await loadLazy(document);
   loadDelayed();
 }
