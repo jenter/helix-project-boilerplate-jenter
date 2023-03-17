@@ -1,0 +1,6 @@
+details {
+  padding: 15px;
+  border: 2px solid rgb(14, 59, 36);
+}
+
+details summary { cursor: pointer; }
