@@ -122,8 +122,17 @@ function loadDelayed() {
 }
 
 async function loadPage() {
+  document.body.style.display = 'block';
+  loadEager(document);
+  loadLazy(document);
+  return;
+  ///////////////////////////
+
+  // waits intentionally for LCP and then removes the document.body.style.display = 'none' from init()
   await loadEager(document);
+  // lazyLoads all the blocks on all the pages, including rewriting DOM, without caching. every page load.
   await loadLazy(document);
+  // setTimeout that is added for some presumed intents
   loadDelayed();
 }
 

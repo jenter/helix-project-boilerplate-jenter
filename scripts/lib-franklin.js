@@ -386,9 +386,19 @@ export function buildBlock(blockName, content) {
  */
 export async function loadBlock(block) {
   const status = block.dataset.blockStatus;
+  const { blockName } = block.dataset;
+
+  // use CF for examples for now
+  if (blockName == 'header' || blockName == 'footer') {
+    const mod = await import(`../blocks/${blockName}/${blockName}.js`);
+    await mod.default(block);
+    block.dataset.blockStatus = 'loaded';
+    return;
+  }
+
   if (status !== 'loading' && status !== 'loaded') {
     block.dataset.blockStatus = 'loading';
-    const { blockName } = block.dataset;
+    // const { blockName } = block.dataset;
     try {
       const cssLoaded = new Promise((resolve) => {
         loadCSS(`${window.hlx.codeBasePath}/blocks/${blockName}/${blockName}.css`, resolve);
@@ -553,6 +563,7 @@ export async function waitForLCP(lcpBlocks) {
   const hasLCPBlock = (block && lcpBlocks.includes(block.dataset.blockName));
   if (hasLCPBlock) await loadBlock(block);
 
+  // why do we need this?
   document.body.style.display = null;
   const lcpCandidate = document.querySelector('main img');
   await new Promise((resolve) => {
@@ -613,6 +624,7 @@ export function setup() {
  * Auto initializiation.
  */
 function init() {
+  // why do we need this?
   document.body.style.display = 'none';
   setup();
   sampleRUM('top');

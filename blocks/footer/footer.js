@@ -5,6 +5,9 @@ import { readBlockConfig, decorateIcons } from '../../scripts/lib-franklin.js';
  * @param {Element} block The footer block element
  */
 export default async function decorate(block) {
+  // there does not seem to be a reason to rewrite the HTML here since our example CF is inserting HTML for now.
+  return;
+
   const cfg = readBlockConfig(block);
   block.textContent = '';
 

@@ -90,56 +90,17 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
-  // fetch nav content
-  const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
-  const resp = await fetch(`${navPath}.plain.html`);
+  const nav = document.querySelector('#nav');
+  const navSections = nav.querySelector('.nav-sections');
 
-  if (resp.ok) {
-    const html = await resp.text();
+  if (!navSections) return;
 
-    // decorate nav DOM
-    const nav = document.createElement('nav');
-    nav.id = 'nav';
-    nav.innerHTML = html;
-
-    const classes = ['brand', 'sections', 'tools'];
-    classes.forEach((c, i) => {
-      const section = nav.children[i];
-      if (section) section.classList.add(`nav-${c}`);
+  navSections.querySelectorAll(':scope > ul > li').forEach((navSection) => {
+    if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
+    navSection.addEventListener('click', () => {
+      const expanded = navSection.getAttribute('aria-expanded') === 'true';
+      toggleAllNavSections(navSections);
+      navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
     });
-
-    const navSections = nav.querySelector('.nav-sections');
-    if (navSections) {
-      navSections.querySelectorAll(':scope > ul > li').forEach((navSection) => {
-        if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
-        navSection.addEventListener('click', () => {
-          if (isDesktop.matches) {
-            const expanded = navSection.getAttribute('aria-expanded') === 'true';
-            toggleAllNavSections(navSections);
-            navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-          }
-        });
-      });
-    }
-
-    // hamburger for mobile
-    const hamburger = document.createElement('div');
-    hamburger.classList.add('nav-hamburger');
-    hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
-        <span class="nav-hamburger-icon"></span>
-      </button>`;
-    hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
-    nav.prepend(hamburger);
-    nav.setAttribute('aria-expanded', 'false');
-    // prevent mobile nav behavior on window resize
-    toggleMenu(nav, navSections, isDesktop.matches);
-    isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
-
-    decorateIcons(nav);
-    const navWrapper = document.createElement('div');
-    navWrapper.className = 'nav-wrapper';
-    navWrapper.append(nav);
-    block.append(navWrapper);
-  }
+  });
 }
