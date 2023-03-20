@@ -4,3 +4,5 @@ details {
 }
 
 details summary { cursor: pointer; }
+
+details h4 { display: inline-block; font-size: 22px; padding: 0; margin: 0; }

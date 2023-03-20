@@ -2,7 +2,7 @@
  * Demo block for semantic accordion reference.
  */
 export default async function decorate(block) {
-  console.log('block html received as: ', block.innerHTML);
+  // console.log('block html received as: ', block.innerHTML);
 
   const accordion = document.createElement('div');
   accordion.classList.add('accordion-wrapper-faux-semantic');
@@ -20,11 +20,11 @@ export default async function decorate(block) {
     const secondParagraph = row.querySelector('p:nth-child(2)');
     const markup = `
         <summary aria-describedby='accordion-${name}' class='accordion-summary'>
-          ${firstParagraph.innerHTML}
+          <h4>${firstParagraph.innerHTML}</h4>
         </summary>
-        <p id='accordion-${name}' class='accordion-full'>
+        <article id='accordion-${name}' class='accordion-full'>
           ${secondParagraph.innerHTML}
-        </p>
+        </article>
     `;
 
     details.innerHTML = markup;
@@ -34,9 +34,9 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.append(accordion);
 
-  console.log('block html converted to: ', block.innerHTML);
+  // console.log('block html converted to: ', block.innerHTML);
 
-  // accesibility helpers for 'aria-expanded'
+  // accesibility helpers for 'aria-expanded' only if needed for screen readers
   document.querySelectorAll('details').forEach((detail) => {
     detail.addEventListener('click', () => {
       detail.setAttribute(
